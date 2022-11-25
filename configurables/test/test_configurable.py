@@ -83,8 +83,8 @@ def test_meta_inheritance(child1, child2, intermediate,parent):
     assert child1.get_options()['scf'].no_edit == parent.get_options()['scf'].no_edit
     
     # Test that sub-options can inherit properly.
-    assert intermediate.get_options()['dft'].get_options(intermediate)['functional'].no_edit is True
-    assert child1.get_options()['dft'].get_options(child1)['functional'].no_edit is True
+    assert intermediate.get_options()['dft'].get_options(type(intermediate))['functional'].no_edit is True
+    assert child1.get_options()['dft'].get_options(type(child1))['functional'].no_edit is True
 
 
 def test_value_inheritance(child1, child2, parent):
