@@ -3,11 +3,11 @@ import yaml
 import textwrap
 import math
 
-from silico.config.configurable.exception import Configurable_option_exception,\
+from silico.configurable.exception import Configurable_option_exception,\
     Missing_option_exception, Disallowed_choice_exception
 from builtins import isinstance
 from silico.misc import Default, defres
-from silico.config.configurable.util import hasopt
+from silico.configurable.util import hasopt
 
 
 class InheritedAttrError(AttributeError):

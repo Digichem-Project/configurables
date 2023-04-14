@@ -3,11 +3,11 @@ from copy import deepcopy
 import deepmerge
 
 # Silico imports.
-from silico.config.configurable.exception import Configurable_exception
+from silico.configurable.exception import Configurable_exception
 from silico.misc import Dynamic_parent
-from silico.config.configurable.option import Option
-from silico.config.configurable.options import Options, Options_mixin
-from silico.config.configurable.util import hasopt
+from silico.configurable.option import Option
+from silico.configurable.options import Options, Options_mixin
+from silico.configurable.util import hasopt
 
 
 class Configurable(Options_mixin):

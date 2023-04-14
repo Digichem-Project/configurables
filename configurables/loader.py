@@ -10,12 +10,12 @@ import deepmerge
 import copy
 
 # Silico imports.
-from silico.config.configurable.exception import Configurable_loader_exception,\
+from silico.configurable.exception import Configurable_loader_exception,\
     Short_tag_path_error, Unresolvable_tag_path_error, Long_tag_path_error
 from silico.exception.base import Silico_exception
-from silico.config.configurable.base import Configurable_class_target
-from silico.config.configurable.util import setopt, getopt, hasopt
-from silico.config.configurable.identifier import Identifier
+from silico.configurable.base import Configurable_class_target
+from silico.configurable.util import setopt, getopt, hasopt
+from silico.configurable.identifier import Identifier
 from silico.misc.base import is_iter, is_int
 
 # Make methods available. We do this because our loaders are going to eventually ask for one of these classes.

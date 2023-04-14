@@ -3,9 +3,9 @@ from collections.abc import MutableMapping
 import deepmerge
 
 # Silico imports.
-from silico.config.configurable.option import Option, InheritedAttrError
+from silico.configurable.option import Option, InheritedAttrError
 from silico.exception.base import Silico_exception
-from silico.config.configurable.exception import Configurable_option_exception,\
+from silico.configurable.exception import Configurable_option_exception,\
     Configurable_exception
 from silico.misc import Default
 

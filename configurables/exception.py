@@ -2,7 +2,7 @@
 import textwrap
 
 from silico.exception.base import Silico_exception
-from silico.config.configurable.util import getopt
+from silico.configurable.util import getopt
 
 
 class Configurable_exception(Silico_exception):
