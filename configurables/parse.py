@@ -24,12 +24,6 @@ def parse_loaders(definitions):
     :param definitions: Definitions to load.
     :returns: A dictionary of Configurable_list objects. Each key will match that given in definitions.
     """
-#     definitions = {
-#         "destination": [Path(location, "Destinations") for location in (master_config_path.parent, system_config_location.parent, user_config_location.parent)],
-#         "program": [Path(location, "Programs") for location in (master_config_path.parent, system_config_location.parent, user_config_location.parent)],
-#         "calculation": [Path(location, "Calculations") for location in (master_config_path.parent, system_config_location.parent, user_config_location.parent)]
-#     }
-    
     parsers = {}
     
     # Iterate through each configurable type.
