@@ -2,12 +2,12 @@ import itertools
 import yaml
 import textwrap
 import math
+import collections
 
 from silico.configurable.exception import Configurable_option_exception,\
     Missing_option_exception, Disallowed_choice_exception
 from builtins import isinstance
 from silico.misc import Default, defres
-from silico.configurable.util import hasopt
 
 
 class InheritedAttrError(AttributeError):
@@ -15,33 +15,35 @@ class InheritedAttrError(AttributeError):
     Exception raised when an inherited attribute cannot be found.
     """
 
-class Nested_dict_type():
+class Nested_dict_type(collections.UserDict):
     """A data type for generic nested dicts."""
     
     def __init__(self, text = ""):
         if isinstance(text, dict):
-            self.value = text
+            data = text
             
         elif isinstance(text, type(self)):
-            self.value = text.value
+            data = text.value
             
         else:
-            value = yaml.safe_load(text)
-            if value is None:
-                self.value = value
+            data = yaml.safe_load(text)
+            if data is None:
+                data = {}
                 
-            elif not isinstance(value, dict):
-                raise TypeError("Cannot convert string '{}' of converted type '{}' to dict".format(value, type(value)))
+            elif not isinstance(data, dict):
+                raise TypeError("Cannot convert string '{}' of converted type '{}' to dict".format(data, type(data)))
             
-            else:
-                self.value = value
-            
+        super().__init__(data)
+    
+    @property
+    def value(self):
+        return self.data
     
     def __str__(self):
-        if self.value is None:
+        if len(self.data) == 0:
             return ""
         else:
-            return yaml.safe_dump(self.value)
+            return yaml.safe_dump(self.data)
 
 
 class Option():
