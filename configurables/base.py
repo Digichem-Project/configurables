@@ -280,6 +280,7 @@ class Configurable_class_target(Dynamic_parent, Configurable):
         
         :raises TypeError: If finalize has not yet been called.
         """
+        self.finalize(False)
         try:
             return self.inner_cls(*args, **kwargs)
         except TypeError:
