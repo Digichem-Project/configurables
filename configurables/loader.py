@@ -226,7 +226,11 @@ class Configurable_loader():
             cls = self.type_class
 
         configurable = cls(loader_path, validate_now = validate, **config)
-        configurable.finalize()
+        
+        # Calling finalize here is a bad idea; it means any changes the user makes will silently be ignored in the child object (unless finalize() is called again).
+        # Also, finalize is now called automatically when the first child object is created.
+        #configurable.finalize()
+        
         return configurable
     
     def size(self):
