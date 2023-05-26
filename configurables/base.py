@@ -65,6 +65,19 @@ class Configurable(Options_mixin):
         for unexpected_key in set(kwargs).difference(self.get_options()):
             # Although this looks like a loop, we will obviously only raise the first exception.
             raise Configurable_exception(self, "unrecognised option '{}'".format(unexpected_key))
+        
+    @classmethod
+    def expand(self, kwargs):
+        """
+        Function to help un-pickling this class.
+        """
+        return self(**kwargs)
+    
+    def __reduce__(self):
+        """
+        Magic function to help pickling this class.
+        """
+        return (self.expand, (self.dump(),))
 
     def validate(self):
         """
