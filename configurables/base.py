@@ -149,7 +149,7 @@ class Configurable_class_target(Dynamic_parent, Configurable):
         if 'meta' not in kwargs or "class_name" not in kwargs['meta']:
             self.meta['class_name'] = self.CLASS_HANDLE[0]
         
-        self.inner_cls = None
+        self._inner_cls = None
         self.loader_list = loader_list if loader_list is not None else []
         self._file_name = file_name
         
@@ -271,8 +271,13 @@ class Configurable_class_target(Dynamic_parent, Configurable):
         
         :param force: Whether to finalize again if this method has already been called. If False and finalize() has been previously called, nothing will happen.
         """
-        if force or self.inner_cls is None:
-            self.inner_cls = self.classify()
+        if force or self._inner_cls is None:
+            self._inner_cls = self.classify()
+            
+    @property
+    def inner_cls(self):
+        self.finalize(False)
+        return self._inner_cls
         
     def __call__(self, *args, **kwargs):
         """
@@ -280,12 +285,11 @@ class Configurable_class_target(Dynamic_parent, Configurable):
         
         :raises TypeError: If finalize has not yet been called.
         """
-        self.finalize(False)
         try:
             return self.inner_cls(*args, **kwargs)
         except TypeError:
             # Type Error, possibly because inner_cls is None.
-            if self.inner_cls is None:
+            if self._inner_cls is None:
                 raise TypeError("Attempted to create object before calling finalize() (inner_cls is None)")
             else:
                 raise
