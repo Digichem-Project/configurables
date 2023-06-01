@@ -20,9 +20,9 @@ from silico.misc.base import is_iter, is_int
 
 # Make methods available. We do this because our loaders are going to eventually ask for one of these classes.
 # TODO: Importing all this here feels weird, perhaps this file should be moved to the submit package?
-import silico.submit.destination
-import silico.submit.program
-import silico.submit.calculation
+# import silico.submit.destination
+# import silico.submit.program
+# import silico.submit.calculation
 
 
 class Configurable_loader():
