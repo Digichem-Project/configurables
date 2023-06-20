@@ -225,7 +225,8 @@ class Configurable_loader():
             # If this breaks something it will be reinstated.
             cls = self.type_class
 
-        configurable = cls(loader_path, validate_now = validate, **config)
+        configurable = cls(loader_list = loader_path, validate_now = validate, **config)
+        #configurable = cls(validate_now = validate, **config)
         
         # Calling finalize here is a bad idea; it means any changes the user makes will silently be ignored in the child object (unless finalize() is called again).
         # Also, finalize is now called automatically when the first child object is created.

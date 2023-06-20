@@ -1,6 +1,7 @@
 # General imports.
 from copy import deepcopy
 import deepmerge
+import yaml
 
 # Silico imports.
 from silico.configurable.exception import Configurable_exception
@@ -41,6 +42,17 @@ class Configurable(Options_mixin):
         instance._configurable_options = deepcopy(values)
         
         return instance
+    
+    @classmethod
+    def from_data(self, data):
+        if isinstance(data, self):
+            return data
+        
+        # Assume data is yaml.
+        data = yaml.safe_load(data)
+        
+        return self(**data)
+        
         
     def deep_merge(self, update):
         """
@@ -94,6 +106,9 @@ class Configurable(Options_mixin):
                 dump[option.name] = option.dump(self, self._configurable_options, explicit = explicit)
                 
         return dump
+    
+    def __str__(self):
+        return yaml.safe_dump(self.dump(True))
     
     @classmethod
     def dump_cls_template(self):
@@ -288,11 +303,12 @@ class Configurable_class_target(Dynamic_parent, Configurable):
         try:
             return self.inner_cls(*args, **kwargs)
         except TypeError:
-            # Type Error, possibly because inner_cls is None.
-            if self._inner_cls is None:
-                raise TypeError("Attempted to create object before calling finalize() (inner_cls is None)")
-            else:
-                raise
+            raise
+#             # Type Error, possibly because inner_cls is None.
+#             if self._inner_cls is None:
+#                 raise TypeError("Attempted to create object before calling finalize() (inner_cls is None)")
+#             else:
+#                 raise
     
     # _actual inherits from Configurable to give it access to neccessary class functions, such as get_cls_options().
     class _actual(Configurable):

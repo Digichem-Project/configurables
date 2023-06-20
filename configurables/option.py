@@ -431,14 +431,17 @@ class Option():
         :param dict_obj: The dict in which the value of this Option is stored. In most cases, the value of this option is evaluated simply as dict_obj[self.name]
         """
         try:
-            return dict_obj[self.name]
+            dict_obj[self.name]
+            val = dict_obj[self.name]
         except KeyError:
             # No value set, return our default value (if we have one).
             try:
-                return self.default(owning_obj)
+                val = self.default(owning_obj)
             except AttributeError:
                 # No value set and no default, panic.
                 raise Missing_option_exception(owning_obj, self) from None
+
+        return val
 
 
     def __set__(self, owning_obj, value):
