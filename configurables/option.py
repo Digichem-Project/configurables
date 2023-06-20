@@ -304,12 +304,19 @@ class Option():
             return self.dump_func(self, owning_obj, value)
         
         # TODO: Review this.
-        # TODO: Should add a check for list types that contain non builtins
         elif value.__class__.__module__ not in ('__builtin__', 'builtins'):
             return str(value)
         
         elif self.list_type is not None:
-            return self.list_type(str(sub_value) if sub_value.__class__.__module__ not in ('__builtin__', 'builtins') else sub_value for sub_value in value)
+            return self.list_type(
+                
+                sub_value.dump() if hasattr(sub_value, "is_configurable")
+                else dict(value) if isinstance(value, Nested_dict_type)
+                else str(sub_value) if sub_value.__class__.__module__ not in ('__builtin__', 'builtins')
+                else sub_value
+                
+                for sub_value in value
+            )
         
         else:
             return value
