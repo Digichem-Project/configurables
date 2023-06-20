@@ -48,7 +48,7 @@ class Configurable(Options_mixin):
         if isinstance(data, self):
             return data
         
-        elif isinstance(str, data):
+        elif isinstance(data, str):
             # Assume data is yaml.
             data = yaml.safe_load(data)
         
