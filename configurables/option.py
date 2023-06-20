@@ -319,6 +319,9 @@ class Option():
             )
         
         else:
+            # Tuple's are a constant problem for representation in yaml, because they have no 'native' representation.
+            # Normally, we can just get away with converting to a list, but this doesn't work for dict keys, which
+            # cannot be lists.
             return value
         
     def get_header(self):
