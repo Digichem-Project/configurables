@@ -18,11 +18,14 @@ from silico.configurable.util import setopt, getopt, hasopt
 from silico.configurable.identifier import Identifier
 from silico.misc.base import is_iter, is_int
 
-# Make methods available. We do this because our loaders are going to eventually ask for one of these classes.
-# TODO: Importing all this here feels weird, perhaps this file should be moved to the submit package?
-# import silico.submit.destination
-# import silico.submit.program
-# import silico.submit.calculation
+
+class Depth_exception(Exception):
+    """
+    An exception used by search_by_tag() to indicate more depth is needed.
+    
+    This is part of a speed 'optimisation'.
+    """
+    pass
 
 
 class Configurable_loader():
@@ -283,13 +286,15 @@ class Configurable_loader():
         else:
             return loader_lists[0]
     
-    def search_by_tag(self, tag):
+    def search_by_tag(self, tag, max_depth = None):
         """
         Search through our child loaders (iteratively) for the first that matches a given tag.
         
         :param tag: The tag to search for.
         :returns: A list of loader lists (a list leading to the loader with the given tag).
         """
+        # This function is called a lot in startup. Speed optimisations have been applied.
+        
         # A list of found configurables.
         loader_lists = []
         
@@ -297,13 +302,45 @@ class Configurable_loader():
             # It's us!
             loader_lists.append([self])
             
-        else:
+        elif max_depth is None:
             # None at this level, we need to ask our children if they match the tag.
+            # To avoid searching the entire tree (when we only really want the closest match)
+            #  we'll search in slowly increasing depths to find a match.
+            if max_depth is None:
+                cur_depth = 0
+            
+            
+            children = self.NEXT
+            
+            while len(loader_lists) == 0 and len(children) > 0:
+                next_children = []
+                
+                for child in children:
+                    # Add the loaders our child found to our list, adding ourself to the start.
+                    try:
+                        child_lists = child.search_by_tag(tag, max_depth = cur_depth)
+                    
+                        for loader_list in child_lists:
+                            loader_list.insert(0, self)
+                            loader_lists.append(loader_list)
+                        
+                    except Depth_exception:
+                        # This child has more children to explore.
+                        next_children.append(child)
+                        
+                cur_depth += 1
+                children = next_children
+        
+        elif max_depth > 0:
             for child in self.NEXT:
                 # Add the loaders our child found to our list, adding ourself to the start.
-                for loader_list in child.search_by_tag(tag):
+                for loader_list in child.search_by_tag(tag, max_depth -1):
                     loader_list.insert(0, self)
                     loader_lists.append(loader_list)
+                    
+        elif len(self.NEXT) > 0:
+            # This flag indicates that we have more children to check, but have run out of depth.
+            raise Depth_exception()
             
         return loader_lists
     
