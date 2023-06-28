@@ -36,12 +36,6 @@ class Configurable_loader():
     # Whether this loader is a partial loader (a partial loader is any that is not a Single Loader).
     partial = True
     
-    @property
-    def TAG(self):
-        """
-        An identifying tag.
-        """
-        return getopt(self.config, "link", "tag", default = None)
     
     @property
     def ALIAS(self):
@@ -78,6 +72,8 @@ class Configurable_loader():
         
         # Save our TYPE.
         self.TYPE = TYPE
+        
+        self.TAG = getopt(config, "link", "tag", default = None)
         
         # The config options at this node.
         self.config = config
