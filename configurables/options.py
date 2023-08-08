@@ -1,6 +1,7 @@
 # General imports.
 from collections.abc import MutableMapping
 import deepmerge
+import copy
 
 # Silico imports.
 from silico.configurable.option import Option, InheritedAttrError
@@ -206,6 +207,14 @@ class Options_mapping(MutableMapping):
         :param key: The key to delete.
         """
         self.get_sub_option(key).set_default(self.owning_obj, self.sub_dict_obj)
+        
+    def __deepcopy__(self, memo):
+        """
+        Get a deep copy of the values of this mapping.
+        
+        The returned copy will be a (nested) dict of values, totally disconnected from the owning object.
+        """
+        return {key: copy.deepcopy(value, memo) for key, value in self.items()}
 
 
 class Options(Option, Options_mixin):
