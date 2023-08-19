@@ -3,11 +3,14 @@ import yaml
 import textwrap
 import math
 import collections
+from datetime import timedelta, datetime
+import re
 
 from silico.configurable.exception import Configurable_option_exception,\
     Missing_option_exception, Disallowed_choice_exception
 from builtins import isinstance
 from silico.misc import Default, defres
+from silico.misc.base import is_number
 
 
 class InheritedAttrError(AttributeError):
@@ -44,6 +47,69 @@ class Nested_dict_type(collections.UserDict):
             return ""
         else:
             return yaml.safe_dump(self.data)
+        
+class Duration():
+    """
+    Simple type class for recording time durations.
+    """
+    
+    def __init__(self, value):
+        # Value could be a Duration object, a timedelta object, a number of seconds, or a duration string.
+        if isinstance(value, type(self)):
+            self.duration = value.duration
+        
+        elif isinstance(value, timedelta):
+            self.duration = value
+        
+        elif is_number(value):
+            seconds = float(value)
+            self.duration = timedelta(seconds = seconds)
+            
+        else:
+            reg = re.compile(r"^([0-9]+-)?([0-9]+):([0-9]+)(:[0-9]+)?$")
+            time_match = reg.match(value)
+            
+            if time_match is None:
+                raise ValueError("Failed to parse time string '{}'".format(value))
+            
+            if time_match.groups()[0] is None:
+                days = 0
+            
+            else:
+                days = int(time_match.groups()[0][:-1])
+                
+            hours = int(time_match.groups()[1])
+            minutes = int(time_match.groups()[2])
+            
+            if time_match.groups()[3] is None:
+                seconds = 0
+            
+            else:
+                seconds = int(time_match.groups()[3][1:])
+            
+            self.duration = timedelta(days = days, hours = hours, minutes = minutes, seconds = seconds)
+            
+    def to_string(self, include_days = True):
+        """
+        """
+        hours = math.floor(self.duration.seconds / 3600)
+        
+        minutes = math.floor((self.duration.seconds - hours * 3600) / 60)
+        seconds = round(self.duration.seconds - (hours * 3600 + minutes * 60))
+        
+        if include_days:
+            return "{}-{:02d}:{:02d}:{:02d}".format(self.duration.days, hours, minutes, seconds)
+        
+        else:
+            # Wrap days into hours.
+            hours += self.duration.days *24
+            return "{:02d}:{:02d}:{:02d}".format(hours, minutes, seconds)
+    
+    def __str__(self):
+        """
+        """
+        return self.to_string()
+        
 
 
 class Option():
