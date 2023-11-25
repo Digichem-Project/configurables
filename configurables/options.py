@@ -10,6 +10,8 @@ from silico.configurable.exception import Configurable_option_exception,\
     Configurable_exception
 from silico.misc import Default
 
+# Speed hack for get_cls_options()
+_cls_db = {}
 
 class Options_mixin():
     """
@@ -36,9 +38,26 @@ class Options_mixin():
         
         The key of each item is the name of the corresponding option.
         """
+        # IMPORTANT: Result caching is in use here for speed improvements.
+        # This means that subsequent changes to the class (ie, adding new options) may not get picked up...
+        try:
+            return _cls_db[cls]
+        
+        except:
+            _cls_db[cls] = dict(
+                sorted(
+                    {getattr(cls, attr).name: getattr(cls, attr) for attr in dir(cls) if isinstance(getattr(cls, attr), Option)}.items(), key = lambda v: v[0].upper()
+                )
+            )
+            return _cls_db[cls]
+        
         # TODO: This function gets called quite a lot (anecdotally), might be worth optimising (caching perhaps?).
         # We apply a custom sort here which ignores case (otherwise all uppercase options appear before all lowercase which is annoying).
-        return dict(sorted({getattr(cls, attr).name: getattr(cls, attr) for attr in dir(cls) if isinstance(getattr(cls, attr), Option)}.items(), key = lambda v: v[0].upper()))
+#         return dict(
+#             sorted(
+#                 {getattr(cls, attr).name: getattr(cls, attr) for attr in dir(cls) if isinstance(getattr(cls, attr), Option)}.items(), key = lambda v: v[0].upper()
+#             )
+#         )
     
     def get_options(self, owning_cls = None):
         """
