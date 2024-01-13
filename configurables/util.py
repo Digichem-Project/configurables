@@ -62,7 +62,7 @@ def appendopt(dict_obj, *option_names, value = Default(None)):
             # Add to the list.
             dict_obj[option_names[0]].append(value)
         
-        except AttributeError:
+        except (AttributeError, KeyError):
             # No list yet, create one.
             dict_obj[option_names[0]] = [value]
 
