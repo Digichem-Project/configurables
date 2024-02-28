@@ -3,7 +3,7 @@ import deepmerge
 import yaml
 
 from configurables.exception import Configurable_exception
-from silico.misc import Dynamic_parent
+from configurables.parent import Dynamic_parent
 from configurables.option import Option
 from configurables.options import Options, Options_mixin
 from configurables.util import hasopt

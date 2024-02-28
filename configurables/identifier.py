@@ -2,7 +2,7 @@ import csv
 
 import logging
 
-from silico.misc.base import is_int
+from configurables.misc import is_int
 
 
 class Identifier():

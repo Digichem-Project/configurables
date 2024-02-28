@@ -1,4 +1,4 @@
-from silico.misc import Default, defres
+from configurables.defres import Default, defres
 import configurables.exception
 
 

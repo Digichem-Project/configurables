@@ -8,8 +8,8 @@ import re
 
 from configurables.exception import Configurable_option_exception,\
     Missing_option_exception, Disallowed_choice_exception
-from silico.misc import Default, defres
-from silico.misc.base import is_number
+from configurables.defres import Default, defres
+from configurables.misc import is_number
 
 
 class InheritedAttrError(AttributeError):

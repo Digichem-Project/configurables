@@ -13,7 +13,7 @@ from configurables.exception import Configurable_loader_exception,\
 from configurables.base import Configurable_class_target
 from configurables.util import setopt, getopt, hasopt
 from configurables.identifier import Identifier
-from silico.misc.base import is_iter, is_int
+from configurables.misc import is_iter, is_int
 
 
 class Depth_exception(Exception):

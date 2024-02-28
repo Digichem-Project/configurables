@@ -1,13 +1,11 @@
-# General imports.
 from collections.abc import MutableMapping
 import deepmerge
 import copy
 
-# Silico imports.
 from configurables.option import Option, InheritedAttrError
 from configurables.exception import Configurable_option_exception,\
     Configurable_exception
-from silico.misc import Default
+from configurables.defres import Default
 
 # Speed hack for get_cls_options()
 _cls_db = {}
