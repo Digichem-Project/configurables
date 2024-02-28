@@ -2,10 +2,10 @@
 
 import pytest
 
-from silico.configurable.base import Configurable
-from silico.configurable.options import Options
-from silico.configurable.option import Option
-from silico.configurable.exception import Configurable_option_exception
+from configurables.base import Configurable
+from configurables.options import Options
+from configurables.option import Option
+from configurables.exception import Configurable_option_exception
 
 
 # Setup our two test classes.
