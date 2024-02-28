@@ -5,17 +5,14 @@ Loaders construct real Configurable_class_target objects from one or more dict o
 Loaders are essentially a speed hack that means we don't have to construct 1000s of objects each time we start up.
 """
 
-# General imports.
 import deepmerge
 import copy
 
-# Silico imports.
-from silico.configurable.exception import Configurable_loader_exception,\
+from configurables.exception import Configurable_loader_exception,\
     Short_tag_path_error, Unresolvable_tag_path_error, Long_tag_path_error
-from silico.exception.base import Silico_exception
-from silico.configurable.base import Configurable_class_target
-from silico.configurable.util import setopt, getopt, hasopt
-from silico.configurable.identifier import Identifier
+from configurables.base import Configurable_class_target
+from configurables.util import setopt, getopt, hasopt
+from configurables.identifier import Identifier
 from silico.misc.base import is_iter, is_int
 
 
@@ -201,7 +198,7 @@ class Configurable_loader():
         """
         Convert (or attempt to) a config dict to an appropriate configurable object.
         
-        :raises Silico_exception: If the class_name of the configurable is not set or cannot be found.
+        :raises Exception: If the class_name of the configurable is not set or cannot be found.
         :param config: The config dict.
         :param validate: Whether to validate the configured object.
         :returns: A loaded Configurable object.
@@ -267,7 +264,7 @@ class Configurable_loader():
             
             else:
                 message = "Could not find a definition with link:tag '{}'".format(tag)
-            raise Silico_exception(message)
+            raise Exception(message)
         
         # We want the match that is closest to us (fewest path steps away).
         shortest = min((len(loader_path) for loader_path in loader_lists))
@@ -408,7 +405,7 @@ class Partial_loader(Configurable_loader):
             # Check our new loader is a possible child of our last.
             if last is not None:
                 if not last.valid_child_path(path):
-                    raise Silico_exception("configurable '{}' is not a valid child of '{}'".format(
+                    raise Exception("configurable '{}' is not a valid child of '{}'".format(
                         configurable.description,
                         parts[-1].description
                     ))

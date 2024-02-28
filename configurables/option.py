@@ -6,9 +6,8 @@ import collections
 from datetime import timedelta, datetime
 import re
 
-from silico.configurable.exception import Configurable_option_exception,\
+from configurables.exception import Configurable_option_exception,\
     Missing_option_exception, Disallowed_choice_exception
-from builtins import isinstance
 from silico.misc import Default, defres
 from silico.misc.base import is_number
 

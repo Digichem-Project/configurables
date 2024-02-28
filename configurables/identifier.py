@@ -1,6 +1,7 @@
 import csv
 
-import silico.log
+import logging
+
 from silico.misc.base import is_int
 
 
@@ -41,7 +42,7 @@ class Identifier():
             
             # Skip if empty.
             if tag_part == "":
-                silico.log.get_logger().warn("ignoring blank section of method tag list")
+                logging.warn("ignoring blank section of method tag list")
                 continue
             
             # Add

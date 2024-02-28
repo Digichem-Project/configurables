@@ -1,11 +1,10 @@
 # Exceptions relating to Configurable objects.
 import textwrap
 
-from silico.exception.base import Silico_exception
-from silico.configurable.util import getopt
+from configurables.util import getopt
 
 
-class Configurable_exception(Silico_exception):
+class Configurable_exception(Exception):
     
     def __init__(self, configurable, reason):
         """
@@ -97,7 +96,7 @@ class Missing_option_exception(Configurable_option_exception, AttributeError):
         AttributeError.__init__(self)
     
 
-class Configurable_loader_exception(Silico_exception):
+class Configurable_loader_exception(Exception):
     """
     Exceptions raised when reading and parsing configurable files.
     """
@@ -133,7 +132,7 @@ class Configurable_loader_exception(Silico_exception):
         
         return message
     
-class Short_tag_path_error(Silico_exception):
+class Short_tag_path_error(Exception):
     """
     A given TAG path was too short.
     """
@@ -152,7 +151,7 @@ class Short_tag_path_error(Silico_exception):
         """
         return "could not resolve TAG list '{}', too few TAG names given".format(self.tag_path)
     
-class Long_tag_path_error(Silico_exception):
+class Long_tag_path_error(Exception):
     """
     A given TAG path was too long.
     """
@@ -173,7 +172,7 @@ class Long_tag_path_error(Silico_exception):
         """
         return "could not resolve remaining items in TAG list '{}', already reached the single loader '{}'".format(self.remaining_tags, self.path[-1].TAG)
     
-class Unresolvable_tag_path_error(Silico_exception):
+class Unresolvable_tag_path_error(Exception):
     """
     A given TAG path is not resolvable (because it could refer to more than one configurable).
     """ 

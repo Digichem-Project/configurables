@@ -7,10 +7,10 @@ import glob
 
 import yaml
 
-from silico.configurable.util import hasopt, getopt, setopt, appendopt
-from silico.configurable.loader import Update_loader, Partial_loader,\
+from configurables.util import hasopt, getopt, setopt, appendopt
+from configurables.loader import Update_loader, Partial_loader,\
     Single_loader, Configurable_list
-from silico.configurable.exception import Configurable_loader_exception
+from configurables.exception import Configurable_loader_exception
 
 
 def parse_loaders(definitions):

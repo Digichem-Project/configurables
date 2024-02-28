@@ -4,9 +4,8 @@ import deepmerge
 import copy
 
 # Silico imports.
-from silico.configurable.option import Option, InheritedAttrError
-from silico.exception.base import Silico_exception
-from silico.configurable.exception import Configurable_option_exception,\
+from configurables.option import Option, InheritedAttrError
+from configurables.exception import Configurable_option_exception,\
     Configurable_exception
 from silico.misc import Default
 
@@ -275,7 +274,7 @@ class Options(Option, Options_mixin):
         # Go through args and add to kwargs.
         for arg in args:
             if arg.name is None:
-                raise Silico_exception("Configurable option given as positional argument to Options must have a name")
+                raise Exception("Configurable option given as positional argument to Options must have a name")
             kwargs[arg.name] = arg
         
         # Dict of child options.

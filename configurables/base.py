@@ -1,14 +1,12 @@
-# General imports.
 from copy import deepcopy
 import deepmerge
 import yaml
 
-# Silico imports.
-from silico.configurable.exception import Configurable_exception
+from configurables.exception import Configurable_exception
 from silico.misc import Dynamic_parent
-from silico.configurable.option import Option
-from silico.configurable.options import Options, Options_mixin
-from silico.configurable.util import hasopt
+from configurables.option import Option
+from configurables.options import Options, Options_mixin
+from configurables.util import hasopt
 
 
 class Configurable(Options_mixin):
