@@ -1,3 +1,31 @@
+def to_bool(booly):
+    """
+    Convert something that might be a bool into a bool.
+    """
+    if type(booly) is str:
+        # Convert to lowercase.
+        booly = booly.lower()
+        if booly in ["yes", "1", "one", "true"]:
+            return True
+        elif booly in ["no", "0", "zero", "false"]:
+            return False
+        else:
+            raise Exception("Could not convert '{}' to bool".format(booly))
+    else:
+        return bool(booly)
+    
+def to_number(value):
+    """
+    Convert a variable to an int or float representation.
+    """
+    try:
+        return int(value)
+    
+    except ValueError:
+        pass
+    
+    return float(value)
+
 def is_number(value):
     """
     Determine whether a variable has a valid int or float representation.
