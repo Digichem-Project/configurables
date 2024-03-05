@@ -154,3 +154,11 @@ def test_dumping(child1):
         },
         'post_hf': "off"
     }
+
+def test_cls_doc(child1):
+    """Test the auto documentation feature."""
+    child1.dump_cls_template()
+
+def test_obj_doc(child1):
+    """Test the auto documentation feature."""
+    child1.dump_obj_template()
