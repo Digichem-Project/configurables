@@ -14,6 +14,12 @@ class Options_mixin():
     """
     Mixin class for those that contain configurable options.
     """
+
+    def __init__(self, allow_unrecognised_options = False):
+        """
+        :param allow_unrecognised_options: If True, validate() will ignore unrecognised options (for this object only).
+        """
+        self.allow_unrecognised_options = allow_unrecognised_options
     
     @classmethod
     def get_cls_option(cls, name):
@@ -122,13 +128,14 @@ class Options_mixin():
             
         # We also need to make sure there are no unexpected options.
         for unexpected_key in set(dict_obj).difference(options):
-            # Although this looks like a loop, we will obviously only raise the first exception.
-            msg = "unrecognised option '{}' with value '{}'".format(unexpected_key, dict_obj[unexpected_key])
-            if hasattr(self, "is_configurable"):
-                raise Configurable_exception(owning_obj, msg)
-            
-            else:
-                raise Configurable_option_exception(owning_obj, self, msg)
+            if not self.allow_unrecognised_options:
+                # Although this looks like a loop, we will obviously only raise the first exception.
+                msg = "unrecognised option '{}' with value '{}'".format(unexpected_key, dict_obj[unexpected_key])
+                if hasattr(self, "is_configurable"):
+                    raise Configurable_exception(owning_obj, msg)
+                
+                else:
+                    raise Configurable_option_exception(owning_obj, self, msg)
 
 
 class Options_mapping(MutableMapping):
@@ -238,7 +245,15 @@ class Options(Option, Options_mixin):
     A type of option that expects more options (another dict).
     """
     
-    def __init__(self, *args, name = None, help = Default(None), validate = Default(None), exclude = Default(None), no_edit = Default(False), **kwargs):
+    def __init__(self, *args,
+                 name = None,
+                 help = Default(None),
+                 validate = Default(None),
+                 exclude = Default(None),
+                 no_edit = Default(False),
+                 allow_unrecognised_options = False,
+                 **kwargs
+                 ):
         """
         """
         consumed_kwargs = {
@@ -248,6 +263,7 @@ class Options(Option, Options_mixin):
             "exclude": exclude,
             "no_edit": no_edit,
         }
+        Options_mixin.__init__(self, allow_unrecognised_options = allow_unrecognised_options)
         # Check that none of the arguments consumed by this constructor are Option objects.
         # This can be an easy mistake, where an Options object is created with a sub option
         # with the same name as one of our arguments ("name", "help", "exclude", "no_edit" etc).

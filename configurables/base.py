@@ -61,21 +61,25 @@ class Configurable(Options_mixin):
         """
         deepmerge.always_merger.merge(self._configurable_options, update)
     
-    def __init__(self, validate_now = True, **kwargs):
+    def __init__(self, validate_now = True, allow_unrecognised_options = False, **kwargs):
         """
         Constructor for Configurable objects.
         
         :param validate_now: If True, the given options will be validated before this constructor returns. Validation can also be performed at any time by calling validate().
         :param **kwargs: Initial values for the Options of this configurable.
         """
+        Options_mixin.__init__(self, allow_unrecognised_options = allow_unrecognised_options)
         # If we've been asked to, validate.
         if validate_now:
             self.validate()
             
         # We also need to make sure there are no unexpected options.
-        for unexpected_key in set(kwargs).difference(self.get_options()):
-            # Although this looks like a loop, we will obviously only raise the first exception.
-            raise Configurable_exception(self, "unrecognised option '{}'".format(unexpected_key))
+        # We have to do this here because unexpected args aren't saved to the options dict,
+        # so this is the last chance to handle them before they are discarded.
+        if not allow_unrecognised_options:
+            for unexpected_key in set(kwargs).difference(self.get_options()):
+                # Although this looks like a loop, we will obviously only raise the first exception.
+                raise Configurable_exception(self, "unrecognised option '{}'".format(unexpected_key))
 
     def validate(self):
         """
