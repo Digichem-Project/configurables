@@ -1,4 +1,4 @@
-
+_child_classes = {}
 
 class Dynamic_parent():
     """
@@ -73,17 +73,22 @@ class Dynamic_parent():
                 handles.append(class_handles[0])
                 
         return sorted(handles)
-    
+
     @classmethod
-    def recursive_subclasses(self):
+    def recursive_subclasses(self, refresh = False):
         """
         Recursively get all the subclasses of this class.
         
         :return: A set of all the classes that descend from this class.  
         """
+        global _child_classes
+        if self in _child_classes and not refresh:
+            return _child_classes[self]
+
         def get_subclasses_worker(cls):
             return set(cls.__subclasses__()).union(
-                [sub_class for top_sub_class in cls.__subclasses__() for sub_class in get_subclasses_worker(top_sub_class)]
+                sub_class for top_sub_class in cls.__subclasses__() for sub_class in get_subclasses_worker(top_sub_class)
             )
-            
-        return get_subclasses_worker(self)
+        
+        _child_classes[self] = get_subclasses_worker(self)
+        return _child_classes[self]
