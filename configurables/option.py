@@ -481,7 +481,7 @@ class Option():
                 for line in lines.split("\n"):
                     if indent_level == 0:
                         # Comment.
-                        indent = "# "
+                        indent = "  "
                     elif indent_level == 1:
                         # Default value
                         indent = "#"
@@ -490,7 +490,18 @@ class Option():
                         indent = ""
                     
                     # We only wrap comment lines, real options can't just be broken.
-                    wrapped_lines.extend(textwrap.wrap(line, 100 if indent_level == 0 else math.inf, replace_whitespace = False, drop_whitespace = False, initial_indent = indent + "  " * line_level, subsequent_indent = indent + "  " * line_level) )
+                    wrapped_lines.extend(
+                        textwrap.wrap(
+                            line,
+                            100 if indent_level == 0 else math.inf,
+                            replace_whitespace = False,
+                            drop_whitespace = False,
+                            #initial_indent = indent + "  " * line_level,
+                            #subsequent_indent = indent + "  " * line_level
+                            initial_indent = indent + "  " * line_level + ("# " if indent_level == 0 else ""),
+                            subsequent_indent = indent + "  " * line_level + ("# " if indent_level == 0 else "")
+                        )
+                    )
             
             return "\n".join(wrapped_lines)
             #return "\n".join(list(itertools.chain(*[textwrap.wrap(template_line, 100, replace_whitespace = False, drop_whitespace = False, initial_indent = ("# " if not is_value else "#") + "  " * level, subsequent_indent = ("# " if not is_value else "#") + "  " * level) for level, is_value, template_line in template])))

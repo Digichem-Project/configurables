@@ -468,7 +468,8 @@ class Options(Option, Options_mixin):
         """
         values = []
         # Start with out name, followed by a colon.
-        values.append((level, 2, "{}:".format(self.name)))
+        comment_level =  1 if self.default else 2
+        values.append((level, 1, "{}:".format(self.name)))
         
         # Get our personal dict if we need to.
         if dict_obj is not None:
