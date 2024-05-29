@@ -1,0 +1,32 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "configurables"
+dynamic = ["version"]
+authors = [
+    {name = "Oliver S. Lee", email = "osl@digi-chem.ac.uk"},
+]
+description = "A python library for providing complex validation for object attributes, and for dynamically loading objects from config files."
+dependencies = [
+
+]
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: Unix",
+]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[project.urls]
+Homepage = "https://github.com/Digichem-Project/configurables"
+Issues = "https://github.com/Digichem-Project/configurables/issues"
+
+[tool.hatch.version]
+path = "configurables/__init__.py"
