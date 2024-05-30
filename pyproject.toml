@@ -10,7 +10,8 @@ authors = [
 ]
 description = "A python library for providing complex validation for object attributes, and for dynamically loading objects from config files."
 dependencies = [
-
+    "deepmerge",
+    "pyyaml"
 ]
 readme = "README.md"
 license = {file = "LICENSE"}
