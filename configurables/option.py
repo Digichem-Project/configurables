@@ -397,7 +397,7 @@ class Option():
             "name": self.name,
             "help": self.help,
             "choices": self.choices,
-            "list_type": self.list_type,
+            "list_type": self.list_type.__name__ if self.list_type is not None else None,
             "type": self.edit_vtype,
             "required": self.required,
             "no_none": self.no_none

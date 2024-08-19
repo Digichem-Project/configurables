@@ -368,11 +368,6 @@ class Options(Option, Options_mixin):
         return {
             "name": self.name,
             "help": self.help,
-            "choices": self.choices,
-            "list_type": self.list_type,
-            "type": self.edit_vtype,
-            "required": self.required,
-            "no_none": self.no_none,
             "children": children,
         }
 
