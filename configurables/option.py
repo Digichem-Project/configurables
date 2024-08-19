@@ -389,6 +389,20 @@ class Option():
             # cannot be lists.
             return value
         
+    def describe(self):
+        """
+        Describe (in a dict) this option, including its type, expected options etc.
+        """
+        return {
+            "name": self.name,
+            "help": self.help,
+            "choices": self.choices,
+            "list_type": self.list_type,
+            "type": self.edit_vtype,
+            "required": self.required,
+            "no_none": self.no_none
+        }
+        
     def get_header(self):
         """
         Generate text that describes this option.
