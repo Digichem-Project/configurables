@@ -389,7 +389,7 @@ class Option():
             # cannot be lists.
             return value
         
-    def describe(self):
+    def describe(self, owning_obj):
         """
         Describe (in a dict) this option, including its type, expected options etc.
         """
