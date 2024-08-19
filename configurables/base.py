@@ -115,7 +115,7 @@ class Configurable(Options_mixin):
         """
         Describe (in a dict) this option, including its type, expected options etc.
         """
-        return {key: value.describe(self) for key, value in self.get_cls_options().items()}
+        return {key: value.describe(self) for key, value in self.get_options(self).items()}
     
     def __str__(self):
         return yaml.safe_dump(self.dump(True))

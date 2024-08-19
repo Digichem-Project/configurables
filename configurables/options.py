@@ -364,7 +364,7 @@ class Options(Option, Options_mixin):
         """
         Describe (in a dict) this option, including its type, expected options etc.
         """
-        children = {key: value.describe(owning_obj) for key, value in self.get_options().items()}
+        children = {key: value.describe(owning_obj) for key, value in self.get_options(type(owning_obj)).items()}
         return {
             "name": self.name,
             "help": self.help,
