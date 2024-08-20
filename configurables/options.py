@@ -360,11 +360,11 @@ class Options(Option, Options_mixin):
         """
         return self.get_inherited_options(owning_cls)
     
-    def describe(self, owning_obj):
+    def describe(self, owning_cls_or_obj):
         """
         Describe (in a dict) this option, including its type, expected options etc.
         """
-        children = {key: value.describe(owning_obj) for key, value in self.get_options(type(owning_obj)).items()}
+        children = {key: value.describe(owning_cls_or_obj) for key, value in self.get_options(owning_cls_or_obj).items()}
         return {
             "name": self.name,
             "help": self.help,
