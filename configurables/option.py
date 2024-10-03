@@ -118,7 +118,7 @@ class Option():
     Options are descriptors that perform type checking and other functionality for Configurables; they expose the options that a certain configurable expects.
     """
     
-    def __init__(self, name = None, *, default = Default(None), help = Default(None), choices = Default(None), validate = Default(None), list_type = Default(None), type = Default(None), type_func = Default(None), exclude = Default(None), required = Default(False), no_none = Default(None), no_edit = Default(False), dump_func = Default(None), edit_vtype = Default(None), data_func = Default(None)):
+    def __init__(self, name = None, *, default = Default(None), help = Default(None), choices = Default(None), validate = Default(None), list_type = Default(None), type = Default(None), type_func = Default(None), exclude = Default(None), required = Default(False), no_none = Default(None), none_to_default = Default(False), no_edit = Default(False), dump_func = Default(None), edit_vtype = Default(None), data_func = Default(None)):
         """
         Constructor for Configurable Option objects.
         
@@ -133,6 +133,7 @@ class Option():
         :param exclude: A list of strings of the names of attributes that this option is mutually exclusive with.
         :param required: Whether this option is required or not.
         :param no_none: Whether to allow None values. This defaults to False unless required == True, in which case no_none defaults to True.
+        :param none_to_default: Whether to convert None values to the default value. False by default.
         :param no_edit: Flag to indicate that this option shouldn't be edited interactively by the user, useful for 'hidden' options that don't make sense to be changed for example.
         :param dump_func: An optional function that will be called to serialize the data of this option ready for dumping to file. The function will be called with 3 arguments: this Option object, the owning Configurable object and the value being set, and should return the value to save.
         :param edit_vtype: An optional explicit string denoting the interactive editor to use for this option.
@@ -156,6 +157,7 @@ class Option():
             "exclude": exclude,
             "required": required,
             "no_none": no_none,
+            "none_to_default": none_to_default,
             "no_edit": no_edit,
             "dump_func": dump_func,
             "edit_vtype": edit_vtype,
@@ -184,6 +186,7 @@ class Option():
             self.no_none = self.required
         else:
             self.no_none = defres(no_none)
+        self.none_to_default = defres(none_to_default)
         self.edit_vtype = defres(edit_vtype)
         # This part of the interface is a bit WIP and might change, this function is used to retrieve data for certain setedits that need it.
         # Currently this is only used for method pickers, which use the data func to retrieve the 'list' of methods to pick from.
@@ -632,8 +635,12 @@ class Option():
         
         value = self.get_from_dict(owning_obj, dict_obj)
         
+        # If we've been asked to, convert None to default.
+        if self.none_to_default and value is None:
+            self.set_default(owning_obj, dict_obj)
+        
         # If our value is None and that's not allowed, panic.
-        if value is None and self.no_none:
+        elif value is None and self.no_none:
             self.set_default(owning_obj, dict_obj)
             raise Configurable_option_exception(owning_obj, self, "value cannot be None")
         
