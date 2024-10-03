@@ -110,6 +110,13 @@ class Configurable(Options_mixin):
                 
         return dump
     
+    @classmethod
+    def describe(self):
+        """
+        Describe (in a dict) this option, including its type, expected options etc.
+        """
+        return {key: value.describe(self) for key, value in self.get_options(self).items()}
+    
     def __str__(self):
         return yaml.safe_dump(self.dump(True))
     

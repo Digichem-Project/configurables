@@ -38,6 +38,9 @@ class Child(Intermediate):
             grid_name = Option(help = "Shorthand name of the DFT grid", default = "big")
         )
     )
+
+    list_items = Option(help = "A list of many things", default = [], none_to_default = True, type = list)
+    none_items = Option(help = "A list of fewer things", default = [], none_to_default = False, type = list)
     
     _post_hf = Option("post_hf", help = "Post HF options")
 
@@ -152,6 +155,8 @@ def test_dumping(child1):
                 'grid_name': "big"
             }
         },
+        'list_items': [],
+        'none_items': [],
         'post_hf': "off"
     }
 
@@ -162,3 +167,18 @@ def test_cls_doc(child1):
 def test_obj_doc(child1):
     """Test the auto documentation feature."""
     child1.dump_obj_template()
+
+def test_none_to_list(child1):
+    """Can we convert None values to a default"""
+    child1.list_items = [1,2,3]
+    child1.none_items = [4,5,6]
+
+    child1.list_items = None
+    child1.none_items = None
+    # Before we validate, no magic happens.
+    assert child1.list_items is None
+    assert child1.none_items is None
+    child1.validate()
+    # Now it's been converted.
+    assert child1.list_items == []
+    assert child1.none_items is None
