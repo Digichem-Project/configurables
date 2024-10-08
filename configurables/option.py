@@ -396,8 +396,15 @@ class Option():
         """
         Describe (in a dict) this option, including its type, expected options etc.
         """
+        try:
+            default = self.default(owning_obj)
+
+        except AttributeError:
+            default = None
+        
         return {
             "name": self.name,
+            "default": default,
             "help": self.help,
             "choices": self.choices,
             "list_type": self.list_type.__name__ if self.list_type is not None else None,
